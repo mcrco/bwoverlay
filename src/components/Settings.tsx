@@ -1,11 +1,12 @@
 import settings from 'electron-settings'
+import { getSetting } from '../util/settings-util'
 
 function Settings(props) {
-    let apiKeys: string[] = ipcRenderer.invoke('getSetting', 'apiKey')
-    let logPath: string = ipcRenderer.sendSync('getSync', 'logPath')
-    let sortField: string = ipcRenderer.sendSync('getSync', 'sortField')
+    let apiKeys: string[] = getSetting('apiKeys')
+    let logPath: string = getSetting('logPath')
+    let sortField: string = getSetting('sortField')
 
-    const getApiKeyVals = () => {
+    const getApiKeyInputs = () => {
         let keys = []
         // for (let i = 0; i < apiKeys.length; i++)
     }
@@ -18,7 +19,7 @@ function Settings(props) {
                 sortField: sortField
             }
         )
-        props.setConfig(ipcRenderer.sendSync('getSyncAll'))
+        props.setLogPath(logPath)
     }
 
     let apiKeyFields = []

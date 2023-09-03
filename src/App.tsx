@@ -1,6 +1,5 @@
-import { useState } from 'react'
-// import chokidar from 'chokidar'
-import settings from 'electron-settings'
+import { useEffect, useState } from 'react'
+import chokidar from 'chokidar'
 
 import './App.css'
 
@@ -8,7 +7,7 @@ import { getPlayers } from './util/log-processor'
 import { getAllStats } from './util/hypixel'
 import StatsList from './components/StatsList'
 import Settings from './components/Settings'
-import { getSetting, getSettings } from './util/settings-util'
+import { getSetting } from './util/settings-util'
 
 type PlayerStats = {
     name: string;
@@ -17,32 +16,33 @@ type PlayerStats = {
     ws: number;
 }
 
-type SettingsType = {
-    apiKeys: string[],
-    logPath: string,
-    sortField: string
-}
-
 function App() {
-    const [tab, setTab] = useState('stats')
+    // 2 tabs/pages: one for stats list, one for settings
+    const [tab, setTab] = useState<string>('stats')
 
-    console.log('hi')
+    // Only setting we need is log path for starting log watcher
+    const [logPath, setLogPath] = useState<string>('')
 
-    const [config, setConfig] = useState<SettingsType>(getSettings() as SettingsType)
-    // const [apiKeys, setApiKeys] = useState(settings.getSync('apiKeys'))
-    // const [logPath, setLogPath] = useState<string>(settings.getSync('logPath') as string)
-    // const [sortField, setSortField] = useState(settings.getSync(''))
-    // const [stats, setStats] = useState([])
+    // Set log path on first render
+    useEffect(() => {
+        getSetting('logPath').then((val: string) => {
+            setLogPath(val)
+        })
+    }, [])
 
-    // let apiKeys = config.apiKeys
-    // let logPath = config.logPath
-    // let sortField = config.sortField
+    // Stats of players in lobby
+    const [stats, setStats] = useState([])
 
-    // const logWatcher = chokidar.watch(logPath)
-    // logWatcher.on('change', () => {
-    //     let players: string[] = getPlayers(logPath)
-    //     setStats(getAllStats(players))
-    // })
+    // Update stats based on log file changes
+    useEffect(() => {
+        const logWatcher = chokidar.watch(logPath)
+        logWatcher.on('change', () => {
+            let players: string[] = getPlayers(logPath)
+            setStats(getAllStats(players))
+        })
+
+        return (() => {logWatcher.close()})
+    }, [logPath]) // Log watcher should restart when log path changes
 
     return (
         <>
@@ -50,7 +50,7 @@ function App() {
                 <div style={{ width: '50%', color: tab == 'stats' ? 'white' : 'grey', fontSize: '20px', textAlign: 'left', paddingLeft: '20px', cursor: 'pointer' }} onClick={() => { setTab('stats') }}> <b>Stats</b> </div>
                 <div style={{ width: '50%', color: tab == 'settings' ? 'white' : 'grey', fontSize: '20px', textAlign: 'right', paddingRight: '20px', cursor: 'pointer' }} onClick={() => { setTab('settings') }}> <b>Settings</b> </div>
             </div>
-            {tab == 'stats' ? <StatsList data={stats} /> : <Settings setConfig={setConfig} />}
+            {tab == 'stats' ? <StatsList data={stats} /> : <Settings setLogPath={setLogPath} />}
         </>
     )
 }
