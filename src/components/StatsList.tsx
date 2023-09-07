@@ -1,15 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../App.css'
+import { PlayerStatsType } from '../util/type-util';
 
-type Player = {
-    name: string;
-    level: number;
-    fkdr: number;
-    ws: number;
-}
+export default function StatsList() {
+    const [stats, setStats] = useState<PlayerStatsType[]>([])
 
-export default function StatsList(props: {data: Player[]}) {
-    const playerData = props.data
+    window.api.invoke('get-setting', 'sortField').then((data) => console.log(data))
+    window.api.receive('stats-update', (event, data) => { setStats(data) })
+
     const entryStyle: React.CSSProperties = {
         borderRadius: '13px',
         backgroundColor: 'rgba(50, 50, 50, 1)',
@@ -22,7 +20,7 @@ export default function StatsList(props: {data: Player[]}) {
     }
 
     const starColor = (level: number) => {
-        switch(true) {
+        switch (true) {
             case level >= 1000:
                 return 'black'
             case level >= 900:
@@ -49,7 +47,7 @@ export default function StatsList(props: {data: Player[]}) {
     }
 
     const fkdrColor = (fkdr: number) => {
-        switch(true) {
+        switch (true) {
             case fkdr >= 50:
                 return 'purple'
             case fkdr >= 25:
@@ -60,13 +58,13 @@ export default function StatsList(props: {data: Player[]}) {
                 return 'yellow'
             case fkdr >= 5:
                 return 'LightYellow'
-            default: 
+            default:
                 return 'grey'
         }
     }
 
     const wsColor = (ws: number) => {
-        switch(true) {
+        switch (true) {
             case ws >= 200:
                 return 'purple'
             case ws >= 100:
@@ -77,24 +75,24 @@ export default function StatsList(props: {data: Player[]}) {
                 return 'yellow'
             case ws >= 3:
                 return 'LightYellow'
-            default: 
+            default:
                 return 'grey'
         }
     }
 
     let list = []
-    console.log(playerData)
-    for (const player of playerData) {
+    // console.log(stats)
+    for (const playerStats of stats) {
         list.push(
             <div style={entryStyle}>
-                <div style={{textAlign: 'left', paddingLeft: '40px', width: '25%'}}>{player.name}</div> 
-                <div style={{textAlign: 'center', paddingLeft: '40px', width: '25%', color: starColor(player.level)}}>{player.level} stars</div> 
-                <div style={{textAlign: 'center', paddingLeft: '40px', width: '25%', color: fkdrColor(player.fkdr)}}>{player.fkdr} fkdr </div> 
-                <div style={{textAlign: 'right', paddingRight: '40px', width: '25%', color: wsColor(player.ws)}}>{player.ws} ws </div>
+                <div style={{ textAlign: 'left', paddingLeft: '40px', width: '25%' }}>{playerStats.name}</div>
+                <div style={{ textAlign: 'center', paddingLeft: '40px', width: '25%', color: starColor(playerStats.level) }}>{playerStats.level} stars</div>
+                <div style={{ textAlign: 'center', paddingLeft: '40px', width: '25%', color: fkdrColor(playerStats.fkdr) }}>{playerStats.fkdr} fkdr </div>
+                <div style={{ textAlign: 'right', paddingRight: '40px', width: '25%', color: wsColor(playerStats.ws) }}>{playerStats.ws} ws </div>
             </div>
         )
     }
-        
+
     return (
         <>
             <div> {list} </div>

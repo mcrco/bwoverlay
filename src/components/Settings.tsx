@@ -1,10 +1,18 @@
-import settings from 'electron-settings'
-import { getSetting } from '../util/settings-util'
+import { useEffect } from "react";
+import { getSetting, getSettings } from "../util/settings-util"
 
 function Settings(props) {
-    let apiKeys: string[] = getSetting('apiKeys')
-    let logPath: string = getSetting('logPath')
-    let sortField: string = getSetting('sortField')
+    let apiKeys: string[];
+    let logPath: string;
+    let sortField: string;
+
+    useEffect(() => {
+        ipcRenderer.invoke('get-settings').then((settings) => {
+            apiKeys = settings.apiKeys
+            logPath = settings.logPath
+            sortField = settings.sortField
+        })
+    }, [])
 
     const getApiKeyInputs = () => {
         let keys = []
@@ -12,13 +20,13 @@ function Settings(props) {
     }
 
     const saveChanges = () => {
-        settings.setSync(
-            {
-                apiKeys: apiKeys,
-                logPath: logPath,
-                sortField: sortField
-            }
-        )
+        // settings.setSync(
+        //     {
+        //         apiKeys: apiKeys,
+        //         logPath: logPath,
+        //         sortField: sortField
+        //     }
+        // )
         props.setLogPath(logPath)
     }
 
