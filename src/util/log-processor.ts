@@ -1,17 +1,12 @@
-export function getPlayers(logFilePath: string) {
-    let lines: string[] = []
-    const logFile = new File(logFilePath)
-    const reader = new FileReader()
-    reader.onload = () => {
-        const contents = reader.result as string
-        lines = contents.split('\n')
-    }
-    reader.readAsText(logFile)
+import fs from 'fs/promises'
+
+export async function getPlayers(logFilePath: string) {
+    const logContent = await fs.readFile(logFilePath, 'utf8')
+    let lines = logContent.split('\n')
 
     for (let i = lines.length - 1; i >= 0; i--) {
         if (lines[i].includes('ONLINE: ')) {
             let players: string[] = lines[i].slice(8).split(', ')
-            console.log(players)
             return players
         }
     }

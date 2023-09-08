@@ -2,7 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .logo {
@@ -39,4 +39,47 @@
 
 .read-the-docs {
   color: #888;
+}
+
+input {
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+}
+
+select {
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: field;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 1em;
+}
+
+.big-spacer {
+    height: 3vh;
+}
+
+.med-spacer {
+    height: 2vh;
+}
+
+.small-spacer {
+    height: 1vh;
+}
+
+.stats-entry {
+    width: 90%;
+    border-radius: 13px;
+    background-color: rgba(50, 50, 50, 1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px
 }
