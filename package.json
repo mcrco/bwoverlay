@@ -1,16 +1,15 @@
 {
     "name": "bwoverlay",
+    "author": "Marco Yang",
     "private": true,
     "version": "0.0.0",
     "description": "Bedwars overlay.",
     "scripts": {
         "dev": "vite",
+        "start": "electron-vite preview",
         "build": "tsc && vite build && electron-builder",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
-        "start": "electron-forge start",
-        "package": "electron-forge package",
-        "make": "electron-forge make",
         "prebuild": "electron-vite build"
     },
     "dependencies": {
@@ -22,18 +21,13 @@
         "react-dom": "^18.2.0"
     },
     "devDependencies": {
-        "@electron-forge/cli": "^6.4.2",
-        "@electron-forge/maker-deb": "^6.4.2",
-        "@electron-forge/maker-rpm": "^6.4.2",
-        "@electron-forge/maker-squirrel": "^6.4.2",
-        "@electron-forge/maker-zip": "^6.4.2",
-        "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
         "@types/react": "^18.0.37",
         "@types/react-dom": "^18.0.11",
         "@typescript-eslint/eslint-plugin": "^5.59.0",
         "@typescript-eslint/parser": "^5.59.0",
         "@vitejs/plugin-react": "^4.0.0",
         "electron": "^24.8.2",
+        "electron-vite": "^1.0.27",
         "eslint": "^8.38.0",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.3.4",
